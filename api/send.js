@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const CHAT_1_ID = '8956326200';
 
   const BOT_2_TOKEN = '885950049:AAH06SNj2czNyQIUAGpouRa_c5Mj7FV91N8';
-  const CHAT_2_ID = '896326200';
+  const CHAT_2_ID = '8926200';
 
   // Extract visitor real IP address securely from Vercel headers
   const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown';
